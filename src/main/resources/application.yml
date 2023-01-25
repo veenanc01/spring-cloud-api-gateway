@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: spring-cloud-api-gateway
+  eureka:
+    client:
+      register-with-eureka: true
+      fetch-registry: true
+      serviceUrl:
+        defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+
+  cloud:
+    discovery:
+      enabled: true
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: DEPARTMENT-SERVICE
+          uri: lb://DEPARTMENT-SERVICE
+          predicates:
+            - Path=/api/v1/departments/**
+        - id: STUDENT-SERVICE
+          uri: lb://STUDENT-SERVICE
+          predicates:
+            - Path=/api/v1/students/**
+
+
+
+        #- RemoteAddr=192.168.0.7
+
+        #- id: consumerModule
+        # uri: lb://SECOND-SERVICE
+      #predicates:
+      # - Path=/consumer/**
+
+
+      #instance:
+      #preferIpAddress: true
+      #hostname: localhost
